@@ -10,35 +10,22 @@ import { Candidate, InterviewSession, Feedback, InterviewResponse } from './src/
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:3000',
-  ];
+// 1. Enable JSON Body Parsing (Required for POST /api/interview)
+app.use(express.json({ limit: '10mb' }));
 
+// 2. Guaranteed CORS Middleware
+app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  // Allow localhost, Vercel, Netlify, or Render domains
-  if (
-    origin &&
-    (allowedOrigins.includes(origin) ||
-      origin.includes('.vercel.app') ||
-      origin.includes('.netlify.app') ||
-      origin.includes('.onrender.com'))
-  ) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    // Fallback default for cross-origin requests
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
+  // Set origin to incoming origin or fallback wildcard
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
+  // Handle browser preflight checks
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
+    return res.status(200).end();
   }
 
   next();
