@@ -1,0 +1,11 @@
+{
+  "name": "HireMind",
+  "description": "Real-time AI-powered technical interview agent with voice assistant, live camera candidate proctoring, session feedback, and REST API compliance.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
