@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { API_BASE_URL, buildApiUrl } from './api/config';
 import { CANDIDATES_DATA } from './data/candidates';
 import { COHORT_DATA } from './data/cohort';
 import { Candidate, CohortData, InterviewSession, ProctorStatus } from './types';
@@ -22,8 +21,8 @@ export default function App() {
     async function loadBackendData() {
       try {
         const [candidatesRes, cohortRes] = await Promise.all([
-          fetch(buildApiUrl('/api/candidates')),
-          fetch(buildApiUrl('/api/cohort')),
+          fetch('/api/candidates'),
+          fetch('/api/cohort'),
         ]);
 
         if (candidatesRes.ok) {

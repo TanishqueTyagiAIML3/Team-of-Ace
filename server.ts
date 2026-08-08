@@ -8,28 +8,9 @@ import { COHORT_DATA } from './src/data/cohort';
 import { Candidate, InterviewSession, Feedback, InterviewResponse } from './src/types';
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = 3000;
 
-// 1. Enable JSON Body Parsing (Required for POST /api/interview)
 app.use(express.json({ limit: '10mb' }));
-
-// 2. Guaranteed CORS Middleware
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-
-  // Set origin to incoming origin or fallback wildcard
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  // Handle browser preflight checks
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  next();
-});
 
 // In-memory interview session store
 const sessions = new Map<string, InterviewSession>();
@@ -440,8 +421,6 @@ app.post('/api/interview', async (req, res) => {
 });
 
 async function startServer() {
-  const shouldServeFrontend = process.env.SERVE_FRONTEND === 'true';
-
   // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
@@ -449,7 +428,7 @@ async function startServer() {
       appType: 'spa',
     });
     app.use(vite.middlewares);
-  } else if (shouldServeFrontend) {
+  } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
