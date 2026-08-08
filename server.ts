@@ -10,7 +10,6 @@ import { Candidate, InterviewSession, Feedback, InterviewResponse } from './src/
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-app.use(express.json({ limit: '10mb' }));
 app.use((req, res, next) => {
   const allowedOrigins = [
     'http://localhost:5173',
@@ -20,9 +19,18 @@ app.use((req, res, next) => {
   ];
 
   const origin = req.headers.origin;
-  if (origin && (allowedOrigins.includes(origin) || origin.includes('.vercel.app'))) {
+
+  // Allow localhost, Vercel, Netlify, or Render domains
+  if (
+    origin &&
+    (allowedOrigins.includes(origin) ||
+      origin.includes('.vercel.app') ||
+      origin.includes('.netlify.app') ||
+      origin.includes('.onrender.com'))
+  ) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-  } else if (!origin) {
+  } else {
+    // Fallback default for cross-origin requests
     res.setHeader('Access-Control-Allow-Origin', '*');
   }
 

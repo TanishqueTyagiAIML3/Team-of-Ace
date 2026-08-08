@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { API_BASE_URL, buildApiUrl } from './api/config';
 import { CANDIDATES_DATA } from './data/candidates';
 import { COHORT_DATA } from './data/cohort';
 import { Candidate, CohortData, InterviewSession, ProctorStatus } from './types';
@@ -11,7 +12,6 @@ import { EvaluationReport } from './components/EvaluationReport';
 import { CustomCursor } from './components/CustomCursor';
 
 export default function App() {
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
   const [candidates, setCandidates] = useState<Candidate[]>(CANDIDATES_DATA);
   const [cohort, setCohort] = useState<CohortData>(COHORT_DATA);
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate>(CANDIDATES_DATA[0]);
@@ -22,8 +22,8 @@ export default function App() {
     async function loadBackendData() {
       try {
         const [candidatesRes, cohortRes] = await Promise.all([
-          fetch(`${apiBaseUrl}/api/candidates`),
-          fetch(`${apiBaseUrl}/api/cohort`),
+          fetch(buildApiUrl('/api/candidates')),
+          fetch(buildApiUrl('/api/cohort')),
         ]);
 
         if (candidatesRes.ok) {
