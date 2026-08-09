@@ -71,5 +71,4 @@ The `@google/genai` SDK is failing with a 404 Error because `gemini-1.5-flash` i
 Please update `server.ts`:
 1. In both `ai.models.generateContent` calls (in `generateInterviewerTurn` and `generateEvaluation`), change the model string to `'gemini-2.5-flash'`.
 2. Make sure the model parameter is passed simply as `'gemini-2.5-flash'`.
-
 Keep all existing prompt structures, dynamic randomization, and fallback handlers intact.
